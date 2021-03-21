@@ -5,18 +5,18 @@ import './css/styles.css';
 import PokemonService from './pokemon-service.js';
 import PokemonCard from './pokemon-card.js';
 
-function makeCardFromData(data) {
-	const name = data.name;
-	const hp = data.hp;
-	const types = data.types;
-	const attacks = data.attacks;
-	const weaknesses = data.weaknesses;
+function makeCardFromData(pokemonData) {
+	const name = pokemonData.name;
+	const hp = pokemonData.hp;
+	const types = pokemonData.types;
+	const attacks = pokemonData.attacks;
+	const weaknesses = pokemonData.weaknesses;
 
 	return new PokemonCard(name, hp, types, attacks, weaknesses);
 }
 
-function showPokemonImage(data) {
-	$('#showImage').append(`<img src='${data[0].images.small}'>`);
+function showPokemonImage(pokemonData) {
+	$('#showImage').append(`<img src='${pokemonData.images.small}'>`);
 }
 
 $('#searchButton').click(function(event) {
@@ -27,8 +27,13 @@ $('#searchButton').click(function(event) {
 	
 	PokemonService.getPokemonData(pokemonName).then(function(response) {
 		if (response.data) {
-			showPokemonImage(response.data);
-			let pokemonCard = makeCardFromData(response.data);
+			showPokemonImage(response.data[0]);
+			$(".hiddenButton").show();
+
+			$('#selectButton').click(function(event) {
+				let pokemonCard = makeCardFromData(response.data[0]);
+				alert(`${pokemonCard.name}, I choose you!`);
+			});
 		}
 	});
 });
