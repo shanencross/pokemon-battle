@@ -16,7 +16,7 @@ function makeCardFromData(pokemonData) {
 }
 
 function showPokemonImage(pokemonData) {
-	$('#showImage').append(`<img src='${pokemonData.images.small}'>`);
+	$('#showImage').html(`<img src='${pokemonData.images.small}'>`);
 }
 
 $('#searchButton').click(function(event) {
