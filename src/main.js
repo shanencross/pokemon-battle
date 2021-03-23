@@ -22,23 +22,25 @@ function showPokemonImage(pokemonData) {
 	$('#showImage').html(`<img src='${pokemonData.images.small}'>`);
 }
 
+async function usePokemonData(pokemonName) {
+	const response = await PokemonService.getPokemonData(pokemonName);
+	if (response.data) {
+		showPokemonImage(response.data[0]);
+		$(".hiddenButton").show();
+		$('#selectButton').off('click');
+		$('#selectButton').click(function(event) {
+			let pokemonCard = makeCardFromData(response.data[0]);
+			pokemonBattle.addPokemon(pokemonCard);
+			alert(`${pokemonCard.name}, I choose you!`);
+		});
+	}
+}
+
+
 $('#searchButton').click(function(event) {
 	event.preventDefault();
-
 	const pokemonName = $('#name').val();
 	$('#name').val('');
-	
-	PokemonService.getPokemonData(pokemonName).then(function(response) {
-		if (response.data) {
-			showPokemonImage(response.data[0]);
-			$(".hiddenButton").show();
-			$('#selectButton').off('click');
-			$('#selectButton').click(function(event) {
-				let pokemonCard = makeCardFromData(response.data[0]);
-				pokemonBattle.addPokemon(pokemonCard);
-				alert(`${pokemonCard.name}, I choose you!`);
-			});
-		}
-	});
+	usePokemonData(pokemonName);
 });
 
